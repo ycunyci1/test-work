@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Product;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DropOldProductsWithoutTags extends Command
 {
@@ -26,9 +27,16 @@ class DropOldProductsWithoutTags extends Command
      */
     public function handle(): void
     {
-        Product::query()
-            ->where('created_at', '<', now()->subWeeks(3))
-            ->whereDoesntHave('tags')
-            ->delete();
+        Log::channel('old-products')->info('Начало удаления продуктов');
+        try {
+            Product::query()
+                ->where('created_at', '<', now()->subWeeks(3))
+                ->whereDoesntHave('tags')
+                ->delete();
+            Log::channel('old-products')->info('Старые продукты успешно удалены!');
+        } catch (\Exception $exception) {
+            Log::channel('old-products')->error('Ошибка: '.$exception->getMessage());
+        }
+
     }
 }

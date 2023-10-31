@@ -65,6 +65,13 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'old-products' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/old-products.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
