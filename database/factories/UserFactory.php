@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -10,6 +12,15 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    public function configure()
+    {
+        return $this->afterCreating(function (User $user) {
+            if (fake()->boolean(10)) {
+                $user->roles()->attach(Role::ADMIN);
+            }
+        });
+    }
+
     /**
      * Define the model's default state.
      *
